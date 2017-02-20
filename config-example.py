@@ -18,3 +18,6 @@ SLACK_CHANNEL = '#taintedlove'
 
 # Where is your love instance? No trailing slash.
 LOVE_BASE_URL = 'https://cwrulove.appspot.com'
+
+# What was the secret given to us by Love? Should be str, not unicode
+LOVE_SECRET = b'paste'

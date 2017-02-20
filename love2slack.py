@@ -24,11 +24,15 @@ simple to receive in AWS Lambda (for some reason...), and so verification is
 not currently supported. In the future, yes.
 """
 
+import hashlib
+import hmac
 import json
 
 import requests
 
 import config
+
+SIG_HDR = 'X-Hub-Signature'
 
 
 def handle(event, context):
@@ -37,6 +41,17 @@ def handle(event, context):
     event: dictionary containing, among other things, body text
     context: lambda related info...
     """
+    # Verify signature
+    if SIG_HDR not in event['headers']:
+        print('ERROR: No signature found.')
+        return
+    hexdigest = event['headers'][SIG_HDR]
+    digest = hmac.new(config.LOVE_SECRET, event['body'], hashlib.sha1)
+    if hexdigest != digest.hexdigest():
+        print('ERROR: Signature verification failed.')
+        return
+
+    # Now deliver webhook to Slack
     data = json.loads(event['body'])
     message = (
         '<{base_url}/explore?user={sender_username}|{sender_name}> loved '
