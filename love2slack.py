@@ -52,18 +52,18 @@ def handle(event, context):
         return
 
     # Now deliver webhook to Slack
+    text = (': ' + data['message']) if config.INCLUDE_MESSAGE else ' :heart:'
     data = json.loads(event['body'])
     message = (
         '<{base_url}/explore?user={sender_username}|{sender_name}> loved '
-        '<{base_url}/explore?user={receiver_username}|{receiver_name}>: '
-        '{message}'
+        '<{base_url}/explore?user={receiver_username}|{receiver_name}>{text}'
     ).format(
         base_url=config.LOVE_BASE_URL,
         sender_username=data['sender']['username'],
         sender_name=data['sender']['full_name'],
         receiver_username=data['receiver']['username'],
         receiver_name=data['receiver']['full_name'],
-        message=data['message'],
+        text=text,
     )
     payload = {
         'text': message,

@@ -21,3 +21,6 @@ LOVE_BASE_URL = 'https://cwrulove.appspot.com'
 
 # What was the secret given to us by Love? Should be str, not unicode
 LOVE_SECRET = b'paste'
+
+# Do we include the actual message? It can feel a bit creepy.
+INCLUDE_MESSAGE = False
